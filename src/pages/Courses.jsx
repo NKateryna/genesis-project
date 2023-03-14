@@ -1,3 +1,11 @@
+import { Typography } from "@mui/material";
+import { CoursesList } from "../components";
+
 export const Courses = () => {
-  return <>courses</>;
-}
+  return (
+    <>
+      <Typography variant="h2">Explore the learnings</Typography>
+      <CoursesList />
+    </>
+  );
+};
