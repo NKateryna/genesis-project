@@ -5,7 +5,7 @@ export const RootRoute = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/courses" element={<Courses />} />
-    <Route path="/course/:courseId" element={<Course />} />
+    <Route path="/courses/:courseId" element={<Course />} />
     <Route path="/*" element={<Navigate to="/" replace />} />
   </Routes>
 );

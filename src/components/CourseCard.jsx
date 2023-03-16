@@ -1,6 +1,7 @@
 import { Chip, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import StarIcon from "@mui/icons-material/Star";
+import { useNavigate } from "react-router-dom";
 
 const useCourseCardStyles = makeStyles({
   wrapper: {
@@ -34,9 +35,12 @@ const useCourseCardStyles = makeStyles({
 
 export const CourseCard = (course) => {
   const classes = useCourseCardStyles();
+  const navigate = useNavigate();
+
+  const handleRedirect = () => navigate(course.id);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} onClick={handleRedirect}>
       <div className={classes.imageContainer}>
         <img
           className={classes.previewImage}
