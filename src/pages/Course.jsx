@@ -2,27 +2,14 @@ import { CircularProgress, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ReactHlsPlayer from "react-hls-player";
-import { makeStyles } from "@mui/styles";
 import { AuthContext } from "../contexts";
 import { services } from "../services";
-import { LessonsList } from "../components";
-
-const useCourseStyles = makeStyles({
-  player: {
-    width: 720,
-    height: "auto",
-  },
-  videoContainer: {
-    display: "flex",
-  },
-});
+import { LessonsList, VideoPlayer } from "../components";
+import { StorageHandler } from "../utils";
 
 export const Course = () => {
-  const classes = useCourseStyles();
   const [token] = useContext(AuthContext);
   const { courseId } = useParams();
-
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeLesson, setActiveLesson] = useState(null);
@@ -34,6 +21,14 @@ export const Course = () => {
 
       setCourse(data);
       setActiveLesson(data.lessons[0]);
+
+      if (StorageHandler.getCourseProgress(data.id) === null) {
+        StorageHandler.setInitialCourseProgress(
+          data.id,
+          data.lessons[0].id,
+          data.lessons.length
+        );
+      }
       setLoading(false);
     };
 
@@ -58,18 +53,13 @@ export const Course = () => {
       </Link>
       <Typography variant="h2">{course.title}</Typography>
       <Typography variant="body2">{course.description}</Typography>
-      <div className={classes.videoContainer}>
-        {/*
-        activeLesson.link should be used instead inside the source, but CORS error is appearing due to server not configured properly
-      */}
-        <ReactHlsPlayer
-          src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-          autoPlay={false}
-          controls={true}
-          className={classes.player}
+      {activeLesson && (
+        <VideoPlayer
+          id={activeLesson.id}
+          title={activeLesson.title}
+          url={activeLesson.link}
         />
-        <Typography variant="h4">{activeLesson.title}</Typography>
-      </div>
+      )}
       <LessonsList
         lessons={course.lessons.filter(
           (lesson) => lesson.id !== activeLesson.id
