@@ -9,7 +9,7 @@ export const coursesService = {
     return {
       courses: courses
         .sort((a, b) => b - a)
-        .slice(page * limit, (page + 1) * limit),
+        .slice((page - 1) * limit, page * limit),
       total: courses.length,
     };
   },

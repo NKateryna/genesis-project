@@ -3,17 +3,23 @@ import { makeStyles } from "@mui/styles";
 import StarIcon from "@mui/icons-material/Star";
 import { useNavigate } from "react-router-dom";
 
-const useCourseCardStyles = makeStyles({
+const useCourseCardStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
-    marginBottom: 24,
-    borderRadius: 4,
+    flexDirection: "column",
+    width: 360,
+    minHeight: 570,
+    borderRadius: 12,
+    overflow: "hidden",
     border: "1px solid black",
     cursor: "pointer",
+    background: "#efefef",
+    [theme.breakpoints.down("md")]: {
+      minHeight: "auto",
+    },
   },
   imageContainer: {
-    width: 720,
-    height: 320,
+    width: "100%",
   },
   previewImage: {
     width: "100%",
@@ -21,17 +27,27 @@ const useCourseCardStyles = makeStyles({
     objectFit: "cover",
   },
   content: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
     padding: 18,
-    width: 720,
+  },
+  skills: {
+    display: "flex",
+    flexWrap: "wrap",
+    marginTop: 10,
   },
   chip: {
-    cursor: "pointer",
+    cursor: "pointer !important",
+    margin: 3,
   },
   rating: {
     display: "flex",
     alignItems: "center",
+    marginTop: "auto",
+    alignSelf: "flex-end",
   },
-});
+}));
 
 export const CourseCard = (course) => {
   const classes = useCourseCardStyles();
@@ -57,23 +73,25 @@ export const CourseCard = (course) => {
           </Typography>
           <Typography variant="overline">{course.lessonsCount}</Typography>
         </Typography>
-        <Typography>
-          <Typography variant="overline" fontWeight="bold">
-            Skills:
-          </Typography>
-          {course.meta.skills?.map((skill) => (
-            <Chip
-              className={classes.chip}
-              key={skill}
-              label={skill}
-              size="small"
-            />
-          ))}
-        </Typography>
-        <Typography className={classes.rating}>
+        {course.meta.skills && (
+          <div className={classes.skills}>
+            <Typography variant="overline" fontWeight="bold">
+              Skills:
+            </Typography>
+            {course.meta.skills?.map((skill) => (
+              <Chip
+                className={classes.chip}
+                key={skill}
+                label={skill}
+                size="small"
+              />
+            ))}
+          </div>
+        )}
+        <div className={classes.rating}>
           <StarIcon color="warning" />
           <Typography variant="overline">{course.rating}</Typography>
-        </Typography>
+        </div>
       </div>
     </div>
   );
